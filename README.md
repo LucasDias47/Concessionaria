@@ -12,7 +12,6 @@ API REST desenvolvida com Java + Spring Boot para gerenciamento de clientes, car
 
 ## 🔧 Funcionalidades
 - Cadastro de clientes
-- Cadastro de veículos
 - Registro de vendas
 - Relatórios simples por endpoint
 
