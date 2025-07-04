@@ -27,8 +27,4 @@ API REST desenvolvida com Java + Spring Boot para gerenciamento de clientes, car
 Acesse a documentação completa no Postman:  
 👉 https://documenter.getpostman.com/view/43091884/2sB34bMjWW
 
-> Substitua o link acima pelo endereço gerado no Postman
-
----
-
 Desenvolvido por **Lucas Dias**
