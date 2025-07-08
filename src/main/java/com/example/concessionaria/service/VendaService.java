@@ -1,8 +1,6 @@
 package com.example.concessionaria.service;
 
 import java.util.ArrayList;
-
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,17 +26,19 @@ import jakarta.transaction.Transactional;
 @Service
 public class VendaService {
 
-	private final ClienteRepository clienteRepository;
+	//private final ClienteRepository clienteRepository;
 	private final CarroRepository carroRepository;
 	private final VendaRepository vendaRepository;
 	private final EnderecoEntregaRepository enderecoEntregaRepository;
-
-	public VendaService(ClienteRepository clienteRepository, CarroRepository carroRepository,
-						VendaRepository vendaRepository, EnderecoEntregaRepository enderecoEntregaRepository) {
-		this.clienteRepository = clienteRepository;
+	private final ClienteService clienteService;
+	
+	public VendaService(CarroRepository carroRepository,
+						VendaRepository vendaRepository, EnderecoEntregaRepository enderecoEntregaRepository, ClienteService clienteService) {
+		//this.clienteRepository = clienteRepository;
 		this.carroRepository = carroRepository;
 		this.vendaRepository = vendaRepository;
 		this.enderecoEntregaRepository = enderecoEntregaRepository;
+		this.clienteService = clienteService;
 	}
 
 	public List<CarroModel> getAllCarros() {
@@ -48,6 +48,8 @@ public class VendaService {
 	@Transactional
 	public VendaModel saveVendaComTudo(VendaRecordDto dto) {
 		
+		
+		/*
 		// 1. Verifica se o cliente já existe pelo CPF
 		Optional<ClienteModel> optionalCliente = clienteRepository.findByCpf(dto.cliente().cpf());
 		ClienteModel cliente;
@@ -60,21 +62,29 @@ public class VendaService {
 			cliente.setCpf(dto.cliente().cpf());
 			clienteRepository.save(cliente);
 		}
+		*/
 		
-		// 2. Salva o cliente
+		//1. Buscar cliente pelo CPF
+		Optional<ClienteModel> optionalCliente = clienteService.buscarPorCpf(dto.cliente().cpf());
+		
+		ClienteModel cliente = optionalCliente.orElseGet(() ->
+			clienteService.criarCliente(dto.cliente()));
+		
+		// 2. Salva o endereço de entrega
 		EnderecoEntregaModel endereco = new EnderecoEntregaModel();
 		endereco.setRua(dto.enderecoEntrega().rua());
 		endereco.setNumero(dto.enderecoEntrega().numero());
 		endereco.setCidade(dto.enderecoEntrega().cidade());
 		enderecoEntregaRepository.save(endereco);
-
+		
+		/*
 		// 3. Salva o endereço de entrega
 		 endereco = new EnderecoEntregaModel();
 		endereco.setRua(dto.enderecoEntrega().rua());
 		endereco.setNumero(dto.enderecoEntrega().numero());
 		endereco.setCidade(dto.enderecoEntrega().cidade());
 		enderecoEntregaRepository.save(endereco);
-
+		*/
 		// 4. Salva os carros
 		Set<CarroModel> carros = new HashSet<>();
 		for (CarroRecordDto carroDto : dto.carros()) {
