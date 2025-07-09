@@ -11,13 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.concessionaria.dto.CarroRecordDto;
 import com.example.concessionaria.dto.VendaRecordDto;
-import com.example.concessionaria.dto.VendaResponseDto;
 import com.example.concessionaria.model.CarroModel;
 import com.example.concessionaria.model.ClienteModel;
 import com.example.concessionaria.model.EnderecoEntregaModel;
 import com.example.concessionaria.model.VendaModel;
-import com.example.concessionaria.repository.CarroRepository;
-import com.example.concessionaria.repository.ClienteRepository;
 import com.example.concessionaria.repository.EnderecoEntregaRepository;
 import com.example.concessionaria.repository.VendaRepository;
 
@@ -26,44 +23,24 @@ import jakarta.transaction.Transactional;
 @Service
 public class VendaService {
 
-	//private final ClienteRepository clienteRepository;
-	private final CarroRepository carroRepository;
 	private final VendaRepository vendaRepository;
 	private final EnderecoEntregaRepository enderecoEntregaRepository;
 	private final ClienteService clienteService;
+	private final CarroService carroService;
 	
-	public VendaService(CarroRepository carroRepository,
+	public VendaService(CarroService carroService,
 						VendaRepository vendaRepository, EnderecoEntregaRepository enderecoEntregaRepository, ClienteService clienteService) {
-		//this.clienteRepository = clienteRepository;
-		this.carroRepository = carroRepository;
+		
+		this.carroService = carroService;
 		this.vendaRepository = vendaRepository;
 		this.enderecoEntregaRepository = enderecoEntregaRepository;
 		this.clienteService = clienteService;
 	}
 
-	public List<CarroModel> getAllCarros() {
-		return carroRepository.findAll();
-	}
 
 	@Transactional
 	public VendaModel saveVendaComTudo(VendaRecordDto dto) {
-		
-		
-		/*
-		// 1. Verifica se o cliente já existe pelo CPF
-		Optional<ClienteModel> optionalCliente = clienteRepository.findByCpf(dto.cliente().cpf());
-		ClienteModel cliente;
-
-		if (optionalCliente.isPresent()) {
-			cliente = optionalCliente.get();
-		} else {
-			cliente = new ClienteModel();
-			cliente.setNome(dto.cliente().nome());
-			cliente.setCpf(dto.cliente().cpf());
-			clienteRepository.save(cliente);
-		}
-		*/
-		
+	
 		//1. Buscar cliente pelo CPF
 		Optional<ClienteModel> optionalCliente = clienteService.buscarPorCpf(dto.cliente().cpf());
 		
@@ -77,26 +54,15 @@ public class VendaService {
 		endereco.setCidade(dto.enderecoEntrega().cidade());
 		enderecoEntregaRepository.save(endereco);
 		
-		/*
-		// 3. Salva o endereço de entrega
-		 endereco = new EnderecoEntregaModel();
-		endereco.setRua(dto.enderecoEntrega().rua());
-		endereco.setNumero(dto.enderecoEntrega().numero());
-		endereco.setCidade(dto.enderecoEntrega().cidade());
-		enderecoEntregaRepository.save(endereco);
-		*/
-		// 4. Salva os carros
+		// 3. Salva os carros
 		Set<CarroModel> carros = new HashSet<>();
 		for (CarroRecordDto carroDto : dto.carros()) {
-			CarroModel carro = new CarroModel();
-			carro.setModelo(carroDto.modelo());
-			carro.setPlaca(carroDto.placa());
-			carro.setCliente(cliente); // associa ao cliente
-			carroRepository.save(carro);
+			CarroModel carro = carroService.criar(carroDto);
+			carro.setCliente(cliente);
 			carros.add(carro);
 		}
 
-		// 5. Cria e salva a venda
+		// 4. Cria e salva a venda
 		VendaModel venda = new VendaModel();
 		venda.setDataVenda(dto.dataVenda());
 		venda.setValorTotal(dto.valorTotal());

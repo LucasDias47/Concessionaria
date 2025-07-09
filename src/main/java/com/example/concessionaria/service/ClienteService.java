@@ -1,13 +1,13 @@
 package com.example.concessionaria.service;
 
 import java.util.List;
+
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import com.example.concessionaria.dto.ClienteRecordDto;
-import com.example.concessionaria.dto.VendaRecordDto;
 import com.example.concessionaria.model.ClienteModel;
 import com.example.concessionaria.repository.ClienteRepository;
 
