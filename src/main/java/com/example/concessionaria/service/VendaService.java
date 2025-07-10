@@ -1,6 +1,5 @@
 package com.example.concessionaria.service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -24,36 +23,31 @@ import jakarta.transaction.Transactional;
 public class VendaService {
 
 	private final VendaRepository vendaRepository;
-	private final EnderecoEntregaRepository enderecoEntregaRepository;
+	private final EnderecoEntregaService enderecoEntregaService;
 	private final ClienteService clienteService;
 	private final CarroService carroService;
-	
+
 	public VendaService(CarroService carroService,
-						VendaRepository vendaRepository, EnderecoEntregaRepository enderecoEntregaRepository, ClienteService clienteService) {
-		
+			VendaRepository vendaRepository, EnderecoEntregaService enderecoEntregaService, ClienteService clienteService) {
+
 		this.carroService = carroService;
 		this.vendaRepository = vendaRepository;
-		this.enderecoEntregaRepository = enderecoEntregaRepository;
+		this.enderecoEntregaService = enderecoEntregaService;
 		this.clienteService = clienteService;
 	}
 
 
 	@Transactional
 	public VendaModel saveVendaComTudo(VendaRecordDto dto) {
-	
+
 		//1. Buscar cliente pelo CPF
 		Optional<ClienteModel> optionalCliente = clienteService.buscarPorCpf(dto.cliente().cpf());
-		
 		ClienteModel cliente = optionalCliente.orElseGet(() ->
-			clienteService.criarCliente(dto.cliente()));
-		
+		clienteService.criarCliente(dto.cliente()));
+
 		// 2. Salva o endereço de entrega
-		EnderecoEntregaModel endereco = new EnderecoEntregaModel();
-		endereco.setRua(dto.enderecoEntrega().rua());
-		endereco.setNumero(dto.enderecoEntrega().numero());
-		endereco.setCidade(dto.enderecoEntrega().cidade());
-		enderecoEntregaRepository.save(endereco);
-		
+		EnderecoEntregaModel endereco = enderecoEntregaService.criarEndereco(dto.enderecoEntrega());
+
 		// 3. Salva os carros
 		Set<CarroModel> carros = new HashSet<>();
 		for (CarroRecordDto carroDto : dto.carros()) {
@@ -72,20 +66,20 @@ public class VendaService {
 
 		return vendaRepository.save(venda);
 	}
-	
+
 	public List<VendaModel> getAllVendas() {
-	    return vendaRepository.findAll();
+		return vendaRepository.findAll();
 	}
 
 	public void deleteVenda(UUID id) {
-	    if (vendaRepository.existsById(id)) {
-	        vendaRepository.deleteById(id);
-	    } else {
-	        throw new RuntimeException("Venda com ID " + id + " não encontrada.");
-	    }
+		if (vendaRepository.existsById(id)) {
+			vendaRepository.deleteById(id);
+		} else {
+			throw new RuntimeException("Venda com ID " + id + " não encontrada.");
+		}
 	}
-	
 
-	}
-	
+
+}
+
 

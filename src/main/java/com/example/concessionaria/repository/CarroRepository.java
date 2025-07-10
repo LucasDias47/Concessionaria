@@ -1,5 +1,6 @@
 package com.example.concessionaria.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -9,7 +10,7 @@ import com.example.concessionaria.model.CarroModel;
 
 public interface CarroRepository extends JpaRepository<CarroModel, UUID>{
 
-	CarroModel findCarroModelByModelo(String modelo);
+	List<CarroModel> findAllByModelo(String modelo);
 }
 
 	

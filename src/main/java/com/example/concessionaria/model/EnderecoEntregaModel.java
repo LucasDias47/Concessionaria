@@ -28,6 +28,9 @@ public class EnderecoEntregaModel implements Serializable {
 
 	@Column(nullable = false)
 	private String cidade;
+	
+	@Column(nullable = false)
+	private String bairro;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@OneToMany(mappedBy = "endereco", fetch = FetchType.LAZY)
@@ -61,6 +64,14 @@ public class EnderecoEntregaModel implements Serializable {
 
 	public String getCidade() {
 		return cidade;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
 	}
 
 	public void setCidade(String cidade) {
