@@ -27,8 +27,8 @@ public class CarroService {
 		return carroRepository.findById(id);
 	}
 	
-	public Optional<CarroModel> buscaPorModelo(String modelo){
-		return Optional.ofNullable(carroRepository.findCarroModelByModelo(modelo));
+	public Optional<List<CarroModel>> buscaPorModelo(String modelo){
+		return Optional.ofNullable(carroRepository.findAllByModelo(modelo));
 	}
 	
 	public CarroModel criar(CarroRecordDto dto) {

@@ -52,7 +52,7 @@ public class CarroController {
 	}
 	
 	@GetMapping("/modelo/{modelo}")
-	public ResponseEntity<CarroModel> buscarPorModelo(@PathVariable String modelo){
+	public ResponseEntity<List<CarroModel>> buscarPorModelo(@PathVariable String modelo){
 		return carroService.buscaPorModelo(modelo)
 				.map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
