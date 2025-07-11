@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.concessionaria.dto.ClienteRecordDto;
+import com.example.concessionaria.dto.cliente.ClienteRecordDto;
 import com.example.concessionaria.model.ClienteModel;
 import com.example.concessionaria.service.ClienteService;
 

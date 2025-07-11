@@ -1,7 +1,8 @@
 package com.example.concessionaria.controller;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.concessionaria.dto.CarroRecordDto;
-import com.example.concessionaria.dto.VendaRecordDto;
-import com.example.concessionaria.dto.VendaRequestDto;
+
+import com.example.concessionaria.dto.carro.CarroRecordDto;
+import com.example.concessionaria.dto.venda.VendaRecordDto;
+import com.example.concessionaria.dto.venda.VendaRequestDto;
 import com.example.concessionaria.model.VendaModel;
 import com.example.concessionaria.service.VendaService;
 
@@ -32,8 +34,14 @@ public class VendaController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<VendaModel>>getAllVendas(){
-		return ResponseEntity.status(HttpStatus.OK).body(vendaService.getAllVendas());
+	public ResponseEntity<Map<String, Object>>getAllVendas(){
+		List<VendaModel> vendas = vendaService.getAllVendas();
+		
+		Map<String, Object> resposta = new HashMap<>();
+		resposta.put("mensagem","Lista de vendas recuperada com sucesso");
+		resposta.put("vendas", vendas);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(resposta);
 	}
 	
 	@PostMapping
