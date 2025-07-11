@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.example.concessionaria.dto.CarroRecordDto;
+import com.example.concessionaria.dto.carro.CarroRecordDto;
 import com.example.concessionaria.model.CarroModel;
 import com.example.concessionaria.repository.CarroRepository;
 

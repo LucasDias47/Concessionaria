@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.example.concessionaria.dto.ClienteRecordDto;
+import com.example.concessionaria.dto.cliente.ClienteRecordDto;
 import com.example.concessionaria.model.ClienteModel;
 import com.example.concessionaria.repository.ClienteRepository;
 

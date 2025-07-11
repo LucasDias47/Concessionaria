@@ -1,21 +1,26 @@
 package com.example.concessionaria.service;
 
 import java.util.HashSet;
+
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.concessionaria.dto.CarroRecordDto;
-import com.example.concessionaria.dto.VendaRecordDto;
+import com.example.concessionaria.dto.carro.CarroRecordDto;
+import com.example.concessionaria.dto.venda.VendaRecordDto;
+import com.example.concessionaria.dto.venda.VendaResponseDto;
 import com.example.concessionaria.model.CarroModel;
 import com.example.concessionaria.model.ClienteModel;
 import com.example.concessionaria.model.EnderecoEntregaModel;
 import com.example.concessionaria.model.VendaModel;
 import com.example.concessionaria.repository.EnderecoEntregaRepository;
 import com.example.concessionaria.repository.VendaRepository;
+import com.example.concessionaria.mapper.VendaMapper;
 
 import jakarta.transaction.Transactional;
 
@@ -36,14 +41,14 @@ public class VendaService {
 		this.clienteService = clienteService;
 	}
 
-
 	@Transactional
-	public VendaModel saveVendaComTudo(VendaRecordDto dto) {
+	public VendaResponseDto saveVendaComTudo(VendaRecordDto dto) {
 
-		//1. Buscar cliente pelo CPF
+		// 1. Buscar cliente pelo CPF
 		Optional<ClienteModel> optionalCliente = clienteService.buscarPorCpf(dto.cliente().cpf());
 		ClienteModel cliente = optionalCliente.orElseGet(() ->
-		clienteService.criarCliente(dto.cliente()));
+			clienteService.criarCliente(dto.cliente())
+		);
 
 		// 2. Salva o endereço de entrega
 		EnderecoEntregaModel endereco = enderecoEntregaService.criarEndereco(dto.enderecoEntrega());
@@ -64,22 +69,11 @@ public class VendaService {
 		venda.setCliente(cliente);
 		venda.setCarros(carros);
 
-		return vendaRepository.save(venda);
+		VendaModel vendaSalva = vendaRepository.save(venda);
+
+		// 5. Retornar DTO de resposta
+		return VendaMapper.toResponseDto(vendaSalva);
 	}
-
-	public List<VendaModel> getAllVendas() {
-		return vendaRepository.findAll();
-	}
-
-	public void deleteVenda(UUID id) {
-		if (vendaRepository.existsById(id)) {
-			vendaRepository.deleteById(id);
-		} else {
-			throw new RuntimeException("Venda com ID " + id + " não encontrada.");
-		}
-	}
-
-
+	
 }
-
-
+	

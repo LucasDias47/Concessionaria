@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.concessionaria.dto.EnderecoEntregaDto;
+import com.example.concessionaria.dto.endereco.EnderecoEntregaDto;
 import com.example.concessionaria.model.EnderecoEntregaModel;
 import com.example.concessionaria.service.EnderecoEntregaService;
 

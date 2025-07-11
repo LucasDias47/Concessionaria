@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.concessionaria.dto.EnderecoEntregaDto;
+import com.example.concessionaria.dto.endereco.EnderecoEntregaDto;
 import com.example.concessionaria.model.EnderecoEntregaModel;
 import com.example.concessionaria.repository.EnderecoEntregaRepository;
 

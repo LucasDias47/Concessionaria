@@ -1,4 +1,4 @@
-package com.example.concessionaria.dto;
+package com.example.concessionaria.dto.venda;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,7 +14,6 @@ public record VendaResponseDto(
 ) {
 
     public record ClienteDto(String nome, String cpf) {}
-
     public record CarroDto(String modelo, String placa) {}
 
 }
