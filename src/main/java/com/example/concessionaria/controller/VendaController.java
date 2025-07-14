@@ -36,27 +36,27 @@ public class VendaController {
 		this.vendaService = vendaService;
 	}
 	
-	@GetMapping
-	public ResponseEntity<Map<String, Object>>getAllVendas(){
-		List<VendaModel> vendas = vendaService.getAllVendas();
-		
-		Map<String, Object> resposta = new HashMap<>();
-		resposta.put("mensagem","Lista de vendas recuperada com sucesso");
-		resposta.put("vendas", vendas);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(resposta);
-	}
-	
 	@PostMapping
 	public ResponseEntity<VendaResponseDto> saveVenda(@RequestBody @Valid VendaRecordDto dto) {
 	    VendaResponseDto response = vendaService.saveVendaComTudo(dto);
 	    return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 	
+	@GetMapping
+	public ResponseEntity<List<VendaResponseDto>>listarVendas(){
+		List<VendaResponseDto> vendas = vendaService.listarTodas();
+		return ResponseEntity.ok(vendas);
+	}
+	
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String>deleteVenda(@PathVariable UUID id){
-		vendaService.deleteVenda(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Venda deletada com successo");	
+		boolean removido = vendaService.deleteVenda(id);
+		if (removido) {
+			return ResponseEntity.ok("Venda deletada com sucesso");
+		}else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Venda não encontrada");
+	}
 	}
 	
 }

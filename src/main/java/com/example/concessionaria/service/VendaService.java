@@ -3,6 +3,7 @@ package com.example.concessionaria.service;
 import java.util.HashSet;
 
 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -73,6 +74,21 @@ public class VendaService {
 
 		// 5. Retornar DTO de resposta
 		return VendaMapper.toResponseDto(vendaSalva);
+	}
+	
+	public List<VendaResponseDto> listarTodas(){
+		return vendaRepository.findAll()
+			.stream()
+			.map(VendaMapper::toResponseDto)
+			.toList();
+	}
+	
+	public boolean deleteVenda(UUID id) {
+		if(vendaRepository.existsById(id)) {
+			vendaRepository.deleteById(id);
+			return true;
+		}
+		return false;
 	}
 	
 }

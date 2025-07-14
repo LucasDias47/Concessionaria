@@ -1,10 +1,15 @@
 package com.example.concessionaria.mapper;
 
 import com.example.concessionaria.dto.carro.CarroRecordDto;
+
+import com.example.concessionaria.dto.cliente.ClienteRecordDto;
+
 import com.example.concessionaria.dto.venda.VendaRecordDto;
 import com.example.concessionaria.dto.venda.VendaResponseDto;
+
 import com.example.concessionaria.model.*;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,33 +22,34 @@ public class VendaMapper {
 			ClienteModel cliente,
 			EnderecoEntregaModel endereco,
 			Set<CarroModel> carros
-			) {
+	){
 		VendaModel venda = new VendaModel();
 		venda.setDataVenda(dto.dataVenda());
 		venda.setValorTotal(dto.valorTotal());
 		venda.setCliente(cliente);
 		venda.setEndereco(endereco);
 		venda.setCarros(carros);
-		return venda;
+		return venda;		
 	}
 
 	public static VendaResponseDto toResponseDto(VendaModel venda) {
-		VendaResponseDto.ClienteDto clienteDto = new VendaResponseDto.ClienteDto(
+		ClienteRecordDto clienteDto = new ClienteRecordDto(
 				venda.getCliente().getNome(),
 				venda.getCliente().getCpf()
-				);
-
-		List<VendaResponseDto.CarroDto> carrosDto = venda.getCarros().stream()
-				.map(c -> new VendaResponseDto.CarroDto(c.getModelo(), c.getPlaca()))
+		);
+		
+		List<CarroRecordDto> carrosDto = venda.getCarros().stream()
+				.map(c -> new CarroRecordDto(c.getModelo(), c.getPlaca()))
 				.collect(Collectors.toList());
-
+		
 		return new VendaResponseDto(
 				venda.getId(),
 				venda.getDataVenda(),
-				venda.getValorTotal(),
+				BigDecimal.valueOf(venda.getValorTotal()),
 				clienteDto,
 				carrosDto
-				);
-		}
+		);
 	}
+}
+
 
