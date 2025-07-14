@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.concessionaria.dto.carro.CarroRecordDto;
 import com.example.concessionaria.dto.venda.VendaRecordDto;
 import com.example.concessionaria.dto.venda.VendaRequestDto;
+import com.example.concessionaria.dto.venda.VendaResponseDto;
 import com.example.concessionaria.model.VendaModel;
 import com.example.concessionaria.service.VendaService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/concessionaria/vendas")
@@ -45,11 +48,10 @@ public class VendaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<VendaModel>saveVenda(@RequestBody VendaRecordDto dto){
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(vendaService.saveVendaComTudo(dto));
+	public ResponseEntity<VendaResponseDto> saveVenda(@RequestBody @Valid VendaRecordDto dto) {
+	    VendaResponseDto response = vendaService.saveVendaComTudo(dto);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
-	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String>deleteVenda(@PathVariable UUID id){
