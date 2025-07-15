@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.concessionaria.dto.cliente.ClienteRecordDto;
+import com.example.concessionaria.dto.cliente.ClienteResponseDto;
+import com.example.concessionaria.mapper.ClienteMapper;
 import com.example.concessionaria.model.ClienteModel;
 import com.example.concessionaria.service.ClienteService;
 
@@ -29,35 +31,42 @@ public class ClienteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ClienteModel>criarCliente(@RequestBody ClienteRecordDto dto){
+	public ResponseEntity<ClienteResponseDto>criarCliente(@RequestBody ClienteRecordDto dto){
 		Optional<ClienteModel> existente = clienteService.buscarPorCpf(dto.cpf());
+		
 		if(existente.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CONFLICT)
-				.body(existente.get());
+			ClienteResponseDto response = ClienteMapper.toResponseDto(existente.get());
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 		}
 		
-		ClienteModel novo = clienteService.criarCliente(dto);
+		ClienteResponseDto novo = clienteService.criarCliente(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(novo);
 	}
 	
 	@GetMapping("/{cpf}")
-	public ResponseEntity<ClienteModel> buscarPorCpf(@PathVariable String cpf){
-		return clienteService.buscarPorCpf(cpf)
-			.map(ResponseEntity::ok)
-			.orElse(ResponseEntity.notFound().build());
+	public ResponseEntity<?> buscarPorCpf(@PathVariable String cpf){
+		Optional<ClienteModel>cliente = clienteService.buscarPorCpf(cpf);
+		
+		if(cliente.isPresent()) {
+			ClienteResponseDto dto = ClienteMapper.toResponseDto(cliente.get());
+			return ResponseEntity.ok(dto);
+		}
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado");
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletarCliente(@PathVariable UUID id){
+	public ResponseEntity<String> deletarCliente(@PathVariable UUID id){
 		Optional<ClienteModel> cliente = clienteService.buscarPorId(id);
 		if(cliente.isPresent()) {
-			clienteService.deletarCliente(id);	
+			clienteService.deletarCliente(id);
+			return ResponseEntity.ok("Cliente deletado com sucesso.");
 		}
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<ClienteModel>> listarTodos(){
+	public ResponseEntity<List<ClienteRecordDto>> listarTodos(){
 		return ResponseEntity.ok(clienteService.listarClientes());
 	}
 	
