@@ -1,6 +1,7 @@
 package com.example.concessionaria.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.catalina.connector.Response;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.concessionaria.dto.carro.CarroRecordDto;
+import com.example.concessionaria.dto.carro.CarroResponseDto;
+import com.example.concessionaria.mapper.CarroMapper;
 import com.example.concessionaria.model.CarroModel;
 import com.example.concessionaria.service.CarroService;
 
@@ -29,26 +32,27 @@ public class CarroController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<CarroModel> criarCarro(@RequestBody CarroRecordDto dto){
-		
-		CarroModel carro = new CarroModel();
-		carro.setModelo(dto.modelo());
-		carro.setPlaca(dto.placa());
-		CarroModel salvo = carroService.salvar(carro);
-		return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+	public ResponseEntity<CarroResponseDto> criarCarro(@RequestBody CarroRecordDto dto){
+		CarroResponseDto response = carroService.criarCarro(dto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<CarroModel>> listarCarros(){
+	public ResponseEntity<List<CarroResponseDto>> listarCarros(){
 		return ResponseEntity.ok(carroService.listarTodos());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<CarroModel> buscarPorId(@PathVariable UUID id){
-		return carroService.buscarPorId(id)
-				.map(ResponseEntity::ok)
-				.orElse(ResponseEntity.notFound().build());
+	public ResponseEntity<?> buscarPorId(@PathVariable UUID id){
+		Optional<CarroModel> carro = carroService.buscarPorId(id);
+		
+		if(carro.isPresent()) {
+			CarroResponseDto dto = CarroMapper.toResponseDto(carro.get());
+			return ResponseEntity.ok(dto);		
+		}
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carro não encontrado.");
 	}
 	
 	@GetMapping("/modelo/{modelo}")
@@ -59,13 +63,16 @@ public class CarroController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletar(@PathVariable UUID id){
-		if(carroService.buscarPorId(id).isPresent()) {
+	public ResponseEntity<String> deletarCarro(@PathVariable UUID id){
+		Optional<CarroModel> carro = carroService.buscarPorId(id);
+		
+		if(carro.isPresent()) {
 			carroService.deletar(id);
-			return ResponseEntity.noContent().build();
-		}else {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok("Carro deletado com sucesso.");
 		}
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carro não encontrado.");
+		
 	}
 
 }
