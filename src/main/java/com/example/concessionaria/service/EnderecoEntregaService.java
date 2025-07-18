@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.concessionaria.dto.endereco.EnderecoEntregaDto;
+import com.example.concessionaria.mapper.EnderecoEntregaMapper;
 import com.example.concessionaria.model.EnderecoEntregaModel;
 import com.example.concessionaria.repository.EnderecoEntregaRepository;
 
@@ -21,11 +22,7 @@ public class EnderecoEntregaService {
 	}
 
 	public EnderecoEntregaModel criarEndereco(EnderecoEntregaDto dto) {
-		EnderecoEntregaModel endereco = new EnderecoEntregaModel();
-		endereco.setRua(dto.rua());
-		endereco.setNumero(dto.numero());
-		endereco.setCidade(dto.cidade());
-		endereco.setBairro(dto.bairro());
+		EnderecoEntregaModel endereco = EnderecoEntregaMapper.toModel(dto);
 		return enderecoEntregaRepository.save(endereco);
 	}
 
