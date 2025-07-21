@@ -24,6 +24,7 @@ import com.example.concessionaria.model.VendaModel;
 import com.example.concessionaria.repository.EnderecoEntregaRepository;
 import com.example.concessionaria.repository.VendaRepository;
 import com.example.concessionaria.mapper.ClienteMapper;
+import com.example.concessionaria.mapper.EnderecoEntregaMapper;
 import com.example.concessionaria.mapper.VendaMapper;
 
 import jakarta.transaction.Transactional;
@@ -62,7 +63,9 @@ public class VendaService {
 		final ClienteModel cliente = clienteExistenteOuNovo;
 		
 		// 2. Salva o endereço de entrega
-		EnderecoEntregaModel endereco = enderecoEntregaService.criarEndereco(dto.enderecoEntrega());
+		EnderecoEntregaModel endereco = enderecoEntregaService.criarEndereco(
+			EnderecoEntregaMapper.toModel(dto.enderecoEntrega())
+		);
 
 		// 3. Salva os carros
 		Set<CarroModel> carros = dto.carros().stream()

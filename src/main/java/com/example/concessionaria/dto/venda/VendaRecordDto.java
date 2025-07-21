@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.example.concessionaria.dto.carro.CarroRecordDto;
 import com.example.concessionaria.dto.cliente.ClienteRecordDto;
+import com.example.concessionaria.dto.endereco.EnderecoEntregaCreateDto;
 import com.example.concessionaria.dto.endereco.EnderecoEntregaDto;
 import com.example.concessionaria.model.EnderecoEntregaModel;
 
@@ -27,7 +28,7 @@ public record VendaRecordDto(
 		
 		@Valid
 		@NotNull(message = "O endereço de entrega é obrigatório.")
-		EnderecoEntregaDto enderecoEntrega,
+		EnderecoEntregaCreateDto enderecoEntrega,
 		
 		@Valid
 		@NotNull(message = "O cliente é obrigatório.")

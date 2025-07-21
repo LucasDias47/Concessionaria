@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.concessionaria.dto.endereco.EnderecoEntregaCreateDto;
 import com.example.concessionaria.dto.endereco.EnderecoEntregaDto;
 import com.example.concessionaria.mapper.EnderecoEntregaMapper;
 import com.example.concessionaria.model.EnderecoEntregaModel;
@@ -36,8 +37,8 @@ public class EnderecoEntregaController{
 	}
 	
 	@PostMapping
-	public ResponseEntity<EnderecoEntregaDto> criarEndereco(@Valid @RequestBody EnderecoEntregaDto dto){
-		EnderecoEntregaModel salvo = enderecoService.criarEndereco(dto);
+	public ResponseEntity<EnderecoEntregaDto> criarEndereco(@RequestBody @Valid EnderecoEntregaCreateDto dto){
+		EnderecoEntregaModel salvo = enderecoService.criarEndereco(EnderecoEntregaMapper.toModel(dto));
 		EnderecoEntregaDto response = EnderecoEntregaMapper.toDto(salvo);
 		return ResponseEntity.status(201).body(response);
 	}

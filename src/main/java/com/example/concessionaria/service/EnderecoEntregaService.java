@@ -7,10 +7,14 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.concessionaria.dto.endereco.EnderecoEntregaCreateDto;
 import com.example.concessionaria.dto.endereco.EnderecoEntregaDto;
 import com.example.concessionaria.mapper.EnderecoEntregaMapper;
 import com.example.concessionaria.model.EnderecoEntregaModel;
 import com.example.concessionaria.repository.EnderecoEntregaRepository;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @Service
 public class EnderecoEntregaService {
@@ -21,9 +25,8 @@ public class EnderecoEntregaService {
 		this.enderecoEntregaRepository = enderecoEntregaRepository;
 	}
 
-	public EnderecoEntregaModel criarEndereco(EnderecoEntregaDto dto) {
-		EnderecoEntregaModel endereco = EnderecoEntregaMapper.toModel(dto);
-		return enderecoEntregaRepository.save(endereco);
+	public EnderecoEntregaModel criarEndereco(EnderecoEntregaModel model) {
+	    return enderecoEntregaRepository.save(model);
 	}
 
 	public List<EnderecoEntregaModel> listarTodos(){

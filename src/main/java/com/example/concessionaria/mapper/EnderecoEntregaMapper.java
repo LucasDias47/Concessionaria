@@ -1,11 +1,15 @@
 package com.example.concessionaria.mapper;
 
+import com.example.concessionaria.dto.endereco.EnderecoEntregaCreateDto;
 import com.example.concessionaria.dto.endereco.EnderecoEntregaDto;
 import com.example.concessionaria.model.EnderecoEntregaModel;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 public class EnderecoEntregaMapper {
 
-	public static EnderecoEntregaModel toModel(EnderecoEntregaDto dto){
+	public static @Valid @NotNull(message = "O endereço de entrega é obrigatório.") EnderecoEntregaModel toModel(EnderecoEntregaCreateDto dto){
 		EnderecoEntregaModel model = new EnderecoEntregaModel();
 		model.setRua(dto.rua());
 		model.setNumero(dto.numero());
