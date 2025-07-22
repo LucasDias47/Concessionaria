@@ -21,6 +21,8 @@ import com.example.concessionaria.mapper.CarroMapper;
 import com.example.concessionaria.model.CarroModel;
 import com.example.concessionaria.service.CarroService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/concessionaria/carros")
 public class CarroController {
@@ -32,7 +34,7 @@ public class CarroController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<CarroResponseDto> criarCarro(@RequestBody CarroRecordDto dto){
+	public ResponseEntity<CarroResponseDto> criarCarro(@RequestBody @Valid CarroRecordDto dto){
 		CarroResponseDto response = carroService.criarCarro(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		

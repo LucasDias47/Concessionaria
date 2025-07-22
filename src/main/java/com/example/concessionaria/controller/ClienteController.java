@@ -20,6 +20,8 @@ import com.example.concessionaria.mapper.ClienteMapper;
 import com.example.concessionaria.model.ClienteModel;
 import com.example.concessionaria.service.ClienteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/concessionaria/clientes")
 public class ClienteController {
@@ -31,7 +33,7 @@ public class ClienteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ClienteResponseDto>criarCliente(@RequestBody ClienteRecordDto dto){
+	public ResponseEntity<ClienteResponseDto>criarCliente(@RequestBody @Valid ClienteRecordDto dto){
 		Optional<ClienteModel> existente = clienteService.buscarPorCpf(dto.cpf());
 		
 		if(existente.isPresent()) {
