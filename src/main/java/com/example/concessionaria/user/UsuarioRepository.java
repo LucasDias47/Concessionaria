@@ -6,5 +6,5 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsuarioRepository extends JpaRepository<UsuarioModel,UUID>{
-	Optional<UsuarioModel> findByLogin(String login);
+	Optional<UsuarioModel> findByLogin(String email);
 }
