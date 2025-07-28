@@ -14,7 +14,7 @@ import com.example.concessionaria.user.UsuarioModel;
 @RequestMapping("/auth")
 public class AuthController {
 	
-	private final AuthenticationService authService;
+	private final AuthenticationService authService = null;
 	
 	@PostMapping("/registrar")
 	public ResponseEntity<String> registrar(@RequestBody UsuarioModel usuario){

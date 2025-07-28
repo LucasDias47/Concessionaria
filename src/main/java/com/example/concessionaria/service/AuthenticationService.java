@@ -1,5 +1,6 @@
 package com.example.concessionaria.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +11,6 @@ import com.example.concessionaria.user.UsuarioRepository;
 
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
 
 	private final UsuarioRepository usuarioRepository;
@@ -18,6 +18,19 @@ public class AuthenticationService {
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 
+	  @Autowired
+	    public AuthenticationService(
+	        UsuarioRepository usuarioRepository,
+	        PasswordEncoder passwordEncoder,
+	        AuthenticationManager authenticationManager,
+	        JwtService jwtService
+	    ) {
+	        this.usuarioRepository = usuarioRepository;
+	        this.passwordEncoder = passwordEncoder;
+	        this.authenticationManager = authenticationManager;
+	        this.jwtService = jwtService;
+	    }
+	
 	public String registrar(UsuarioModel usuario){
 		usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 		usuarioRepository.save(usuario);
