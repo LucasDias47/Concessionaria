@@ -26,12 +26,12 @@ public class UsuarioDetails implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return usuario.getSenha();
+		return usuario.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return usuario.getLogin();
+		return usuario.getUsername();
 	}
 	
 	@Override

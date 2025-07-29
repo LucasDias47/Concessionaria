@@ -1,7 +1,8 @@
 package com.example.concessionaria.user;
 
 import java.util.Collection;
-import java.util.Collections; 
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -27,15 +28,18 @@ public class UsuarioModel implements UserDetails {
     @Column(unique = true)
     private String login;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+    
     private String senha;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection getAuthorities() {
         return Collections.singleton(role); 
-
+    }
     @Override
     public String getPassword() {
         return senha;
