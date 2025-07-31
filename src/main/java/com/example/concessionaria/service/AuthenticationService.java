@@ -3,6 +3,7 @@ package com.example.concessionaria.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class AuthenticationService {
 	    }
 	
 	public String registrar(UsuarioModel usuario){
-		usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+		usuario.setSenha(passwordEncoder.encode(usuario.getPassword()));
 		usuarioRepository.save(usuario);
 		return jwtService.gerarToken(usuario);
 	}

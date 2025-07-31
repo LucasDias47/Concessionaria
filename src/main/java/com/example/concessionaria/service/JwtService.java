@@ -49,4 +49,9 @@ public class JwtService {
 		final String email = extrairEmail(token);
 		return email.equals(userDetails.getUsername());
 	}
+
+	public String extrairLogin(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
