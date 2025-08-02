@@ -15,7 +15,7 @@ public class UsuarioService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		return usuarioRepository.findByEmail(username)
+		return usuarioRepository.findByUsername(username)
 				.map(UsuarioDetails::new)
 				.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 	}

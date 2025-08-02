@@ -33,16 +33,16 @@ public class AuthenticationService {
 	    }
 	
 	public String registrar(UsuarioModel usuario){
-		usuario.setSenha(passwordEncoder.encode(usuario.getPassword()));
+		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 		usuarioRepository.save(usuario);
 		return jwtService.gerarToken(usuario);
 	}
 	
-	public String autenticar(String email, String senha){
+	public String autenticar(String username, String password){
 		authenticationManager.authenticate(
-		    new UsernamePasswordAuthenticationToken(email, senha)		
+		    new UsernamePasswordAuthenticationToken(username, password)		
 		);
-		var usuario = usuarioRepository.findByEmail(email)
+		var usuario = usuarioRepository.findByUsername(username)
 							.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 		return jwtService.gerarToken(usuario);
 	}

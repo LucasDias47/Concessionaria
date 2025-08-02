@@ -29,9 +29,9 @@ public class UsuarioModel implements UserDetails {
     private String login;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String username;
     
-    private String senha;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -42,12 +42,12 @@ public class UsuarioModel implements UserDetails {
     }
     @Override
     public String getPassword() {
-        return senha;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return login;
+        return username;
     }
 
     @Override
@@ -83,8 +83,8 @@ public class UsuarioModel implements UserDetails {
         this.login = login;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String senha) {
+        this.password = senha;
     }
 
     public Role getRole() {
