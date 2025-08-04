@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.concessionaria.user.Role;
 import com.example.concessionaria.user.UsuarioModel;
 import com.example.concessionaria.user.UsuarioRepository;
 
@@ -34,7 +35,13 @@ public class AuthenticationService {
 	
 	public String registrar(UsuarioModel usuario){
 		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-		usuarioRepository.save(usuario);
+		 usuario.setLogin(usuario.getUsername());
+		 
+		 if (usuario.getRole() == null) {
+		        usuario.setRole(Role.USER);
+		    }
+		var salvo = usuarioRepository.save(usuario);
+		System.out.println("Usuário salvo com ID: " + salvo.getId());
 		return jwtService.gerarToken(usuario);
 	}
 	

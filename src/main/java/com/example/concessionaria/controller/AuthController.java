@@ -27,6 +27,8 @@ public class AuthController {
 		return ResponseEntity.ok(token);
 	}
 	
+	
+	
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginRequestDto request){
 		System.out.println("Username recebido: " + request.username());
